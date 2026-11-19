@@ -20,7 +20,8 @@ last_pipe = pygame.time.get_ticks() - pipe_frequency
 
 ##load images
 bg = pygame.image.load('img/bg.png')
-
+start = pygame.image.load('img/start.png')
+start_img = pygame.transform.scale(start, (300, 100))
 #Game loop control
 running = True
 #Create a clock object to control the frame rate
@@ -105,7 +106,13 @@ while running:
                 flying = True
             flappy.velocity = -10
 
-    screen.blit(bg,(0,0))   
+    if not flying and not game_over:
+        # BEFORE START: Draw background FIRST, then start image ON TOP
+        screen.blit(bg, (0, 0))
+        screen.blit(start_img, start_img.get_rect(center=(260, 100)))
+    else:
+        # GAME STARTED: Keep the background, remove the start text
+        screen.blit(bg, (0, 0))
 
     bird_group.draw(screen)
     bird_group.update()
@@ -132,6 +139,7 @@ while running:
 
         pipe_group.update()
 
+    
 
     #Update the display
     pygame.display.update()
